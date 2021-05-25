@@ -176,12 +176,13 @@ def test_complex():
     }
     assert macro_sym.stores == {"title", "title_upper", "subtitle"}
     assert macro_sym.find_ref("render_title") == "l_0_render_title"
-    assert macro_sym.dump_stores() == {
-        "title": "l_1_title",
-        "title_upper": "l_1_title_upper",
-        "subtitle": "l_1_subtitle",
-        "render_title": "l_0_render_title",
-    }
+
+    assert tuple(macro_sym.dump_stores().items()) == (
+        ("subtitle", "l_1_subtitle"),
+        ("title", "l_1_title"),
+        ("title_upper", "l_1_title_upper"),
+        ("render_title", "l_0_render_title"),
+    ), "iteration order should be deterministic"
 
     body_sym = symbols_for_node(body_block)
     assert body_sym.refs == {
